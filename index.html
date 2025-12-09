@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
+        <title>CV Creator</title>
+
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&family=Playfair+Display:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&family=Lato:wght@300;400;700&family=Open+Sans:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap"
+            rel="stylesheet"
+        />
+
+        <link rel="stylesheet" href="css/style.css" />
+    </head>
+    <body>
+        <div class="app-container">
+            <div class="sidebar-panel" id="sidebarPanel">
+                <div class="sidebar-header">
+                    <div class="flex items-center justify-between">
+                        <h1 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-file-lines text-blue-400"></i>
+                            CV Creator
+                        </h1>
+                        <button onclick="toggleSidebar()" class="close-sidebar-btn text-gray-400 hover:text-white text-lg" style="display: none">
+                            <i class="fa-solid fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="sidebar-content">
+                    <div class="collapse-section open">
+                        <div class="collapse-header" onclick="toggleCollapse(this)">
+                            <h3><i class="fa-solid fa-download"></i> Export & Save</h3>
+                            <i class="fa-solid fa-chevron-down collapse-icon"></i>
+                        </div>
+                        <div class="collapse-body">
+                            <div class="collapse-content">
+                                <button onclick="handlePrint()" id="downloadBtn" class="btn-primary mb-2">
+                                    <i class="fa-solid fa-file-pdf"></i> Download PDF
+                                </button>
+                                <p class="text-[9px] text-gray-400 mb-2 text-center">
+                                    Select "Save as PDF" & check "Background Graphics" in print options.
+                                </p>
+                                <div class="flex gap-2">
+                                    <button onclick="saveProject()" class="btn-sm flex-1">
+                                        <i class="fa-solid fa-floppy-disk"></i> Save
+                                    </button>
+                                    <button onclick="document.getElementById('loadInput').click()" class="btn-sm flex-1">
+                                        <i class="fa-solid fa-folder-open"></i> Load
+                                    </button>
+                                    <button onclick="showResetModal()" class="btn-sm danger">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                    <input type="file" id="loadInput" class="hidden" accept=".json" onchange="loadProject(event)" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapse-section open">
+                        <div class="collapse-header" onclick="toggleCollapse(this)">
+                            <h3><i class="fa-solid fa-id-card"></i> Header</h3>
+                            <i class="fa-solid fa-chevron-down collapse-icon"></i>
+                        </div>
+                        <div class="collapse-body">
+                            <div class="collapse-content space-y-2">
+                                <button onclick="addBlock('photo')" class="add-item-btn">
+                                    <i class="fa-solid fa-camera"></i> Add Photo
+                                </button>
+                                <button onclick="addBlock('name')" class="add-item-btn">
+                                    <i class="fa-solid fa-user"></i> Add Name
+                                </button>
+                                <button onclick="addBlock('title')" class="add-item-btn">
+                                    <i class="fa-solid fa-tag"></i> Add Job Title
+                                </button>
+
+                                <p class="section-label">Contact Info (toggle on/off)</p>
+                                <div class="toggle-grid" id="contactToggles">
+                                    <div class="toggle-item" onclick="toggleContact('email')" data-type="email">
+                                        <i class="fa-solid fa-envelope"></i><span>Email</span>
+                                    </div>
+                                    <div class="toggle-item" onclick="toggleContact('phone')" data-type="phone">
+                                        <i class="fa-solid fa-phone"></i><span>Phone</span>
+                                    </div>
+                                    <div class="toggle-item" onclick="toggleContact('location')" data-type="location">
+                                        <i class="fa-solid fa-location-dot"></i><span>Location</span>
+                                    </div>
+                                    <div class="toggle-item" onclick="toggleContact('linkedin')" data-type="linkedin">
+                                        <i class="fa-brands fa-linkedin"></i><span>LinkedIn</span>
+                                    </div>
+                                    <div class="toggle-item" onclick="toggleContact('github')" data-type="github">
+                                        <i class="fa-brands fa-github"></i><span>GitHub</span>
+                                    </div>
+                                    <div class="toggle-item" onclick="toggleContact('website')" data-type="website">
+                                        <i class="fa-solid fa-globe"></i><span>Website</span>
+                                    </div>
+                                    <div class="toggle-item" onclick="toggleContact('twitter')" data-type="twitter">
+                                        <i class="fa-brands fa-twitter"></i><span>Twitter</span>
+                                    </div>
+                                    <div class="toggle-item" onclick="toggleContact('portfolio')" data-type="portfolio">
+                                        <i class="fa-solid fa-briefcase"></i><span>Portfolio</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapse-section open">
+                        <div class="collapse-header" onclick="toggleCollapse(this)">
+                            <h3><i class="fa-solid fa-bars"></i> Sidebar</h3>
+                            <i class="fa-solid fa-chevron-down collapse-icon"></i>
+                        </div>
+                        <div class="collapse-body">
+                            <div class="collapse-content space-y-2">
+                                <button onclick="addBlock('skills')" class="add-item-btn">
+                                    <i class="fa-solid fa-list-check"></i> Skills
+                                </button>
+                                <button onclick="addBlock('languages')" class="add-item-btn">
+                                    <i class="fa-solid fa-language"></i> Languages
+                                </button>
+                                <button onclick="addBlock('interests')" class="add-item-btn">
+                                    <i class="fa-solid fa-heart"></i> Interests
+                                </button>
+                                <button onclick="addBlock('awards')" class="add-item-btn">
+                                    <i class="fa-solid fa-trophy"></i> Awards
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapse-section open">
+                        <div class="collapse-header" onclick="toggleCollapse(this)">
+                            <h3><i class="fa-solid fa-file-alt"></i> Main Content</h3>
+                            <i class="fa-solid fa-chevron-down collapse-icon"></i>
+                        </div>
+                        <div class="collapse-body">
+                            <div class="collapse-content space-y-2">
+                                <button onclick="addBlock('summary')" class="add-item-btn">
+                                    <i class="fa-solid fa-align-left"></i> Profile / Summary
+                                </button>
+                                <button onclick="addBlock('experience')" class="add-item-btn">
+                                    <i class="fa-solid fa-briefcase"></i> Experience
+                                </button>
+                                <button onclick="addBlock('volunteering')" class="add-item-btn">
+                                    <i class="fa-solid fa-handshake"></i> Volunteering
+                                </button>
+                                <button onclick="addBlock('education')" class="add-item-btn">
+                                    <i class="fa-solid fa-graduation-cap"></i> Education
+                                </button>
+                                <button onclick="addBlock('certifications')" class="add-item-btn">
+                                    <i class="fa-solid fa-certificate"></i> Certifications
+                                </button>
+                                <button onclick="addBlock('projects')" class="add-item-btn">
+                                    <i class="fa-solid fa-folder-open"></i> Projects
+                                </button>
+                                <button onclick="addBlock('references')" class="add-item-btn">
+                                    <i class="fa-solid fa-users"></i> References
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapse-section open">
+                        <div class="collapse-header" onclick="toggleCollapse(this)">
+                            <h3><i class="fa-solid fa-swatchbook"></i> Templates</h3>
+                            <i class="fa-solid fa-chevron-down collapse-icon"></i>
+                        </div>
+                        <div class="collapse-body">
+                            <div class="collapse-content">
+                                <div class="template-grid">
+                                    <div class="template-btn active" onclick="setTemplate('modern')" id="tpl-modern">
+                                        <div class="preview">
+                                            <div style="width: 36%; background: #475569;"></div>
+                                            <div style="flex: 1; background: #e2e8f0;"></div>
+                                        </div>
+                                        <span class="name">Modern</span>
+                                    </div>
+                                    <div class="template-btn" onclick="setTemplate('professional')" id="tpl-professional">
+                                        <div class="preview" style="flex-direction: row">
+                                            <div style="width: 36%; background: #f8fafc; border-right: 1px solid #cbd5e1;"></div>
+                                            <div style="flex: 1; background: white;"></div>
+                                        </div>
+                                        <span class="name">Pro</span>
+                                    </div>
+                                    <div class="template-btn" onclick="setTemplate('executive')" id="tpl-executive">
+                                        <div class="preview" style="flex-direction: row-reverse">
+                                            <div style="width: 36%; background: #e2e8f0; border-left: 2px solid #3b82f6;"></div>
+                                            <div style="flex: 1; background: #f1f5f9;"></div>
+                                        </div>
+                                        <span class="name">Exec</span>
+                                    </div>
+                                    <div class="template-btn" onclick="setTemplate('elegant')" id="tpl-elegant">
+                                        <div class="preview" style="flex-direction: row">
+                                            <div style="width: 34%; background: white; border-right: 1px solid #e2e8f0;"></div>
+                                            <div style="flex: 1; background: white;"></div>
+                                        </div>
+                                        <span class="name">Elegant</span>
+                                    </div>
+                                    <div class="template-btn" onclick="setTemplate('classic')" id="tpl-classic">
+                                        <div class="preview" style="flex-direction: row-reverse">
+                                            <div style="width: 36%; background: #f8fafc; border-left: 2px solid #334155;"></div>
+                                            <div style="flex: 1; background: white;"></div>
+                                        </div>
+                                        <span class="name">Classic</span>
+                                    </div>
+                                    <div class="template-btn" onclick="setTemplate('bold')" id="tpl-bold">
+                                        <div class="preview" style="flex-direction: row">
+                                            <div style="width: 38%; background: #0f172a;"></div>
+                                            <div style="flex: 1; background: white;"></div>
+                                        </div>
+                                        <span class="name">Bold</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="collapse-section">
+                        <div class="collapse-header" onclick="toggleCollapse(this)">
+                            <h3><i class="fa-solid fa-palette"></i> Colors & Font</h3>
+                            <i class="fa-solid fa-chevron-down collapse-icon"></i>
+                        </div>
+                        <div class="collapse-body">
+                            <div class="collapse-content">
+                                <div class="grid grid-cols-2 gap-3 mb-3">
+                                    <div>
+                                        <label class="text-[9px] text-gray-500 block mb-1">Primary</label>
+                                        <input type="color" value="#1e3a5f" id="bgColorPicker" oninput="updateColor('bg', this.value)" class="w-full h-7 rounded cursor-pointer bg-transparent border border-gray-600" />
+                                    </div>
+                                    <div>
+                                        <label class="text-[9px] text-gray-500 block mb-1">Accent</label>
+                                        <input type="color" value="#3b82f6" id="accentColorPicker" oninput="updateColor('accent', this.value)" class="w-full h-7 rounded cursor-pointer bg-transparent border border-gray-600" />
+                                    </div>
+                                </div>
+                                <label class="text-[9px] text-gray-500 block mb-1">Presets</label>
+                                <div class="color-presets mb-3">
+                                    <div class="color-preset" style="background: linear-gradient(135deg, #1e3a5f, #3b82f6);" onclick="applyPreset('#1e3a5f', '#3b82f6')"></div>
+                                    <div class="color-preset" style="background: linear-gradient(135deg, #7c2d12, #f97316);" onclick="applyPreset('#7c2d12', '#f97316')"></div>
+                                    <div class="color-preset" style="background: linear-gradient(135deg, #4c1d95, #8b5cf6);" onclick="applyPreset('#4c1d95', '#8b5cf6')"></div>
+                                    <div class="color-preset" style="background: linear-gradient(135deg, #0f172a, #f43f5e);" onclick="applyPreset('#0f172a', '#f43f5e')"></div>
+                                    <div class="color-preset" style="background: linear-gradient(135deg, #064e3b, #34d399);" onclick="applyPreset('#064e3b', '#34d399')"></div>
+                                    <div class="color-preset" style="background: linear-gradient(135deg, #374151, #6b7280);" onclick="applyPreset('#374151', '#6b7280')"></div>
+                                    <div class="color-preset" style="background: linear-gradient(135deg, #1e293b, #0ea5e9);" onclick="applyPreset('#1e293b', '#0ea5e9')"></div>
+                                </div>
+                                <label class="text-[9px] text-gray-500 block mb-1">Font</label>
+                                <select id="fontSelector" class="w-full p-2 rounded bg-[#0f172a] text-gray-300 border border-gray-700 text-[11px]" onchange="updateFont(this.value)">
+                                    <option value="'Inter', sans-serif">Inter</option>
+                                    <option value="'Roboto', sans-serif">Roboto</option>
+                                    <option value="'Open Sans', sans-serif">Open Sans</option>
+                                    <option value="'Lato', sans-serif">Lato</option>
+                                    <option value="'Montserrat', sans-serif">Montserrat</option>
+                                    <option value="'Source Sans 3', sans-serif">Source Sans</option>
+                                    <option value="'Merriweather', serif">Merriweather</option>
+                                    <option value="'Playfair Display', serif">Playfair Display</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 p-2 rounded-lg bg-blue-900/20 border border-blue-800/30">
+                        <p class="text-[9px] text-blue-300 font-medium mb-1">
+                            <i class="fa-solid fa-lightbulb text-yellow-400 mr-1"></i> Tips
+                        </p>
+                        <ul class="text-[9px] text-gray-400 space-y-0.5">
+                            <li>• Wheel to Zoom In/Out</li>
+                            <li>• Drag background to Pan</li>
+                            <li>• Tap block to edit (Mobile)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-canvas" id="mainCanvas">
+                <div id="paper-container">
+                    <div id="resume-paper" class="template-modern">
+                        <div class="resume-layout">
+                            <div class="resume-sidebar bg-dynamic sortable-list" id="area-sidebar">
+                                <p class="text-white/40 text-xs text-center py-8">Add content from sidebar</p>
+                            </div>
+                            <div class="resume-main sortable-list" id="area-body">
+                                <p class="text-gray-400 text-sm text-center py-16">Start building your CV</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="zoom-controls">
+                    <button class="zoom-btn" onclick="zoomCanvas(0.1)">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                    <button class="zoom-btn" onclick="zoomCanvas(-0.1)">
+                        <i class="fa-solid fa-minus"></i>
+                    </button>
+                    <button class="zoom-btn" onclick="resetZoom()">
+                        <i class="fa-solid fa-compress"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <div class="modal-overlay" id="resetModal">
+            <div class="modal-content">
+                <h3 class="text-base font-bold text-white mb-2">
+                    <i class="fa-solid fa-triangle-exclamation text-yellow-400 mr-2"></i>Reset CV?
+                </h3>
+                <p class="text-gray-400 text-xs mb-4">
+                    This will delete all content and cannot be undone.
+                </p>
+                <div class="flex gap-2">
+                    <button onclick="hideResetModal()" class="btn-sm flex-1 justify-center">Cancel</button>
+                    <button onclick="resetCV()" class="btn-sm danger flex-1 justify-center">Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="autosave-indicator" id="autosaveIndicator">
+            <i class="fa-solid fa-check-circle"></i> Saved
+        </div>
+
+        <script src="js/config.js"></script>
+        <script src="js/canvas.js"></script>
+        <script src="js/drag.js"></script>
+        <script src="js/app.js"></script>
+    </body>
+</html>
